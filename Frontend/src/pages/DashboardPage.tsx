@@ -12,11 +12,14 @@ const DashboardPage = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const navigate = useNavigate();
 
+    // Define your API base URL using the environment variable
+    const API_BASE_URL = import.meta.env.VITE_API_URL; // <--- ADD THIS LINE
+
     const fetchTasks = async () => {
         const token = localStorage.getItem('token');
         try {
             const res = await fetch(
-                `http://localhost:5000/api/tasks?search=${search}`,
+                `${API_BASE_URL}/api/tasks?search=${search}`, // <--- USE API_BASE_URL HERE
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -52,7 +55,7 @@ const DashboardPage = () => {
 
     const handleSave = async (task: Task) => {
         const token = localStorage.getItem('token');
-        const res = await fetch('http://localhost:5000/api/tasks', {
+        const res = await fetch(`${API_BASE_URL}/api/tasks`, { // <--- USE API_BASE_URL HERE
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

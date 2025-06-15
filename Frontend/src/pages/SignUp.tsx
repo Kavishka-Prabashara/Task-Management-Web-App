@@ -7,10 +7,13 @@ const RegisterPage = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+    // Define your API base URL using the environment variable
+    const API_BASE_URL = import.meta.env.VITE_API_URL; // <--- ADD THIS LINE
+
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch('http://localhost:5000/api/auth/register', {
+            const res = await fetch(`${API_BASE_URL}/api/auth/register`, { // <--- USE API_BASE_URL HERE
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, password }),
