@@ -13,13 +13,13 @@ const DashboardPage = () => {
     const navigate = useNavigate();
 
     // Define your API base URL using the environment variable
-    /*const API_BASE_URL = import.meta.env.VITE_API_URL; // <--- ADD THIS LINE*/
+    const API_BASE_URL = import.meta.env.VITE_API_URL; // <--- ADD THIS LINE
 
     const fetchTasks = async () => {
         const token = localStorage.getItem('token');
         try {
             const res = await fetch(
-                `https://task-management-web-app-1lf3.vercel.app//api/tasks?search=${search}`, // <--- USE API_BASE_URL HERE
+                `${API_BASE_URL}/api/tasks?search=${search}`, // <--- USE API_BASE_URL HERE
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -55,7 +55,7 @@ const DashboardPage = () => {
 
     const handleSave = async (task: Task) => {
         const token = localStorage.getItem('token');
-        const res = await fetch(`https://task-management-web-app-1lf3.vercel.app/api/tasks`, { // <--- USE API_BASE_URL HERE
+        const res = await fetch(`${API_BASE_URL}/api/tasks`, { // <--- USE API_BASE_URL HERE
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
