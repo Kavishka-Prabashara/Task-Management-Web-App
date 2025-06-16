@@ -8,36 +8,45 @@ const taskRoutes = require('./routes/tasks');
 
 const app = express();
 
-// ✅ Allow both your frontend deployments
+// ✅ Allowed frontend origins for development and production
 const allowedOrigins = [
+    'http://localhost:5173',
     'https://task-management-web-app-xi.vercel.app',
-    'http://localhost:5173' // Optional: for local testing
+    'https://task-management-web-app-1lf3.vercel.app',
+    'https://task-management-web-app-backend.vercel.app'
 ];
 
+// ✅ CORS middleware with origin check
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like Postman or curl)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
+        if (!origin || allowedOrigins.includes(origin)) {
             return callback(null, true);
+        } else {
+            return callback(new Error('CORS blocked: origin not allowed'), false);
         }
-        return callback(new Error('CORS blocked: origin not allowed'), false);
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 
+// ✅ Middleware
 app.use(express.json());
 
+// ✅ Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/tasks', taskRoutes);
 
-mongoose.connect(process.env.MONGO_URI)
+// ✅ MongoDB connection
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
     .then(() => {
-        console.log('Connected to MongoDB');
-        app.listen(process.env.PORT, () =>
-            console.log(`Server running on port ${process.env.PORT}`)
+        console.log('✅ Connected to MongoDB');
+        const PORT = process.env.PORT || 5000;
+        app.listen(PORT, () =>
+            console.log(`🚀 Server running on port ${PORT}`)
         );
     })
-    .catch(err => console.error('MongoDB connection error:', err));
+    .catch(err => console.error('❌ MongoDB connection error:', err));
