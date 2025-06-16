@@ -8,20 +8,23 @@ const taskRoutes = require('./routes/tasks');
 
 const app = express();
 
-// Allowed frontend origins
-const allowedOrigins = ['https://task-management-web-app-xi.vercel.app'];
+// ✅ Allow both your frontend deployments
+const allowedOrigins = [
+    'https://task-management-web-app-xi.vercel.app',
+    'http://localhost:5173' // Optional: for local testing
+];
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (e.g., mobile apps, Postman)
+        // Allow requests with no origin (like Postman or curl)
         if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy does not allow access from this origin.';
-            return callback(new Error(msg), false);
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
         }
-        return callback(null, true);
+        return callback(new Error('CORS blocked: origin not allowed'), false);
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 
