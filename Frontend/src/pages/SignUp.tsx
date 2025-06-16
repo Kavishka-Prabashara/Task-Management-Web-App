@@ -8,12 +8,12 @@ const RegisterPage = () => {
     const navigate = useNavigate();
 
     // Define your API base URL using the environment variable
-    const API_BASE_URL = import.meta.env.VITE_API_URL; // <--- ADD THIS LINE
+    /*const API_BASE_URL = import.meta.env.VITE_API_URL; // <--- ADD THIS LINE*/
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await fetch(`${API_BASE_URL}/api/auth/register`, { // <--- USE API_BASE_URL HERE
+            const res = await fetch(`https://task-management-web-app-1lf3.vercel.app/api/auth/register`, { // <--- USE API_BASE_URL HERE
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, email, password }),
